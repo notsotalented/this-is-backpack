@@ -60,33 +60,33 @@ class ArticleCrudController extends CrudController
             ]);
             $this->crud->addColumn('tags');
 
-            $this->crud->addFilter([ // select2 filter
-                'name' => 'category_id',
-                'type' => 'select2',
-                'label'=> 'Category',
-            ], function () {
-                return \App\Models\Category::all()->keyBy('id')->pluck('name', 'id')->toArray();
-            }, function ($value) { // if the filter is active
-                $this->crud->addClause('where', 'category_id', $value);
-            });
+            // $this->crud->addFilter([ // select2 filter
+            //     'name' => 'category_id',
+            //     'type' => 'select2',
+            //     'label'=> 'Category',
+            // ], function () {
+            //     return \App\Models\Category::all()->keyBy('id')->pluck('name', 'id')->toArray();
+            // }, function ($value) { // if the filter is active
+            //     $this->crud->addClause('where', 'category_id', $value);
+            // });
 
-            $this->crud->addFilter([ // select2_multiple filter
-                'name' => 'tags',
-                'type' => 'select2_multiple',
-                'label'=> 'Tags',
-            ], function () {
-                return \App\Models\Tag::all()->keyBy('id')->pluck('name', 'id')->toArray();
-            }, function ($values) { // if the filter is active
-                $this->crud->query = $this->crud->query->whereHas('tags', function ($q) use ($values) {
-                    foreach (json_decode($values) as $key => $value) {
-                        if ($key == 0) {
-                            $q->where('tags.id', $value);
-                        } else {
-                            $q->orWhere('tags.id', $value);
-                        }
-                    }
-                });
-            });
+            // $this->crud->addFilter([ // select2_multiple filter
+            //     'name' => 'tags',
+            //     'type' => 'select2_multiple',
+            //     'label'=> 'Tags',
+            // ], function () {
+            //     return \App\Models\Tag::all()->keyBy('id')->pluck('name', 'id')->toArray();
+            // }, function ($values) { // if the filter is active
+            //     $this->crud->query = $this->crud->query->whereHas('tags', function ($q) use ($values) {
+            //         foreach (json_decode($values) as $key => $value) {
+            //             if ($key == 0) {
+            //                 $q->where('tags.id', $value);
+            //             } else {
+            //                 $q->orWhere('tags.id', $value);
+            //             }
+            //         }
+            //     });
+            // });
         });
 
         /*
@@ -119,17 +119,17 @@ class ArticleCrudController extends CrudController
             $this->crud->addField([
                 'name' => 'content',
                 'label' => 'Content',
-                'type' => 'ckeditor',
+                'type' => 'text',
                 'placeholder' => 'Your textarea text here',
             ]);
             $this->crud->addField([
                 'name' => 'image',
                 'label' => 'Image',
-                'type' => 'browse',
+                'type' => 'text',
             ]);
             $this->crud->addField([
                 'label' => 'Category',
-                'type' => 'relationship',
+                'type' => 'text',
                 'name' => 'category_id',
                 'entity' => 'category',
                 'attribute' => 'name',
@@ -138,7 +138,7 @@ class ArticleCrudController extends CrudController
             ]);
             $this->crud->addField([
                 'label' => 'Tags',
-                'type' => 'relationship',
+                'type' => 'text',
                 'name' => 'tags', // the method that defines the relationship in your Model
                 'entity' => 'tags', // the method that defines the relationship in your Model
                 'attribute' => 'name', // foreign key attribute that is shown to user
