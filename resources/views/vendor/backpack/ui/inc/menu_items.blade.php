@@ -12,6 +12,9 @@
     <x-backpack::menu-dropdown-item title="Articles" icon="la la-newspaper-o" :link="backpack_url('article')" />
     <x-backpack::menu-dropdown-item title="Categories" icon="la la-list" :link="backpack_url('category')" />
     <x-backpack::menu-dropdown-item title="Tags" icon="la la-tag" :link="backpack_url('tag')" />
+    <x-backpack::menu-dropdown-header title="Expenditures" />
+    <x-backpack::menu-dropdown-item title="Accounts" icon="la la-piggy-bank" :link="backpack_url('account')" />
+    <x-backpack::menu-dropdown-item title="Transactions" icon="la la-balance-scale" :link="backpack_url('transaction')" />
 </x-backpack::menu-dropdown>
 
 <x-backpack::menu-item title='Backups' icon='la la-hdd-o' :link="backpack_url('backup')" />
@@ -22,3 +25,4 @@
 
 <x-backpack::menu-item title='Menu' icon='la la-list' :link="backpack_url('menu-item')" />
 <x-backpack::menu-item :title="trans('backpack::crud.file_manager')" icon="la la-files-o" :link="backpack_url('elfinder')" />
+
