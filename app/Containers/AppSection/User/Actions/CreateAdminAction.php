@@ -31,6 +31,7 @@ class CreateAdminAction extends ParentAction
             $user = $this->createUserTask->run($data);
             $adminRoleName = config('appSection-authorization.admin_role');
             foreach (array_keys(config('auth.guards')) as $guardName) {
+                dump($guardName);
                 $adminRole = $this->findRoleTask->run($adminRoleName, $guardName);
                 $this->assignRolesToUserTask->run($user, $adminRole);
             }

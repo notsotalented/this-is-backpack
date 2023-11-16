@@ -2,7 +2,7 @@
 
 namespace App\Containers\AppSection\Authorization\Tasks;
 
-use App\Containers\AppSection\Authorization\Models\Role;
+use Spatie\Permission\Models\Role;
 use App\Containers\AppSection\User\Models\User;
 use App\Ship\Parents\Tasks\Task as ParentTask;
 

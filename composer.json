@@ -46,6 +46,7 @@
         "backpack/permissionmanager": "^7.1",
         "backpack/settings": "^3.1",
         "backpack/theme-tabler": "^1.1",
+        "cviebrock/eloquent-sluggable": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.0",
         "laravel/tinker": "^2.8",

@@ -3,7 +3,8 @@
 namespace App\Containers\AppSection\Authorization\Tasks;
 
 use App\Containers\AppSection\Authorization\Data\Repositories\PermissionRepository;
-use App\Containers\AppSection\Authorization\Models\Permission;
+//use App\Containers\AppSection\Authorization\Models\Permission;
+use Spatie\Permission\Models\Permission;
 use App\Ship\Exceptions\CreateResourceFailedException;
 use App\Ship\Parents\Tasks\Task as ParentTask;
 
