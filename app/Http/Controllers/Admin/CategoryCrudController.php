@@ -1,10 +1,10 @@
 <?php
 
-namespace Backpack\NewsCRUD\app\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Backpack\NewsCRUD\app\Http\Requests\CategoryRequest;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryCrudController extends CrudController
 {
@@ -14,11 +14,11 @@ class CategoryCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ReorderOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\InlineCreateOperation;
 
     public function setup()
     {
-        CRUD::setModel("Backpack\NewsCRUD\app\Models\Category");
+        CRUD::setModel("App\Models\Category");
         CRUD::setRoute(config('backpack.base.route_prefix', 'admin').'/category');
         CRUD::setEntityNameStrings('category', 'categories');
     }

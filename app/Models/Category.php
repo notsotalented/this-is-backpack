@@ -1,6 +1,6 @@
 <?php
 
-namespace Backpack\NewsCRUD\app\Models;
+namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -54,17 +54,17 @@ class Category extends Model
 
     public function parent()
     {
-        return $this->belongsTo('Backpack\NewsCRUD\app\Models\Category', 'parent_id');
+        return $this->belongsTo('App\Models\Category', 'parent_id');
     }
 
     public function children()
     {
-        return $this->hasMany('Backpack\NewsCRUD\app\Models\Category', 'parent_id');
+        return $this->hasMany('App\Models\Category', 'parent_id');
     }
 
     public function articles()
     {
-        return $this->hasMany('Backpack\NewsCRUD\app\Models\Article');
+        return $this->hasMany('App\Models\Article');
     }
 
     /*

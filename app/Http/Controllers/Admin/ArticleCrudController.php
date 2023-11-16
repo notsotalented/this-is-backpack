@@ -1,21 +1,21 @@
 <?php
 
-namespace Backpack\NewsCRUD\app\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\NewsCRUD\app\Http\Requests\ArticleRequest;
+use App\Http\Requests\ArticleRequest;
 
 class ArticleCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\BulkCloneOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\CloneOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\BulkCloneOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\BulkDeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
-    use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
+    //use \Backpack\CRUD\app\Http\Controllers\Operations\FetchOperation;
 
     public function setup()
     {
@@ -24,7 +24,7 @@ class ArticleCrudController extends CrudController
         | BASIC CRUD INFORMATION
         |--------------------------------------------------------------------------
         */
-        $this->crud->setModel(\Backpack\NewsCRUD\app\Models\Article::class);
+        $this->crud->setModel(\App\Models\Article::class);
         $this->crud->setRoute(config('backpack.base.route_prefix', 'admin').'/article');
         $this->crud->setEntityNameStrings('article', 'articles');
 
@@ -65,7 +65,7 @@ class ArticleCrudController extends CrudController
                 'type' => 'select2',
                 'label'=> 'Category',
             ], function () {
-                return \Backpack\NewsCRUD\app\Models\Category::all()->keyBy('id')->pluck('name', 'id')->toArray();
+                return \App\Models\Category::all()->keyBy('id')->pluck('name', 'id')->toArray();
             }, function ($value) { // if the filter is active
                 $this->crud->addClause('where', 'category_id', $value);
             });
@@ -75,7 +75,7 @@ class ArticleCrudController extends CrudController
                 'type' => 'select2_multiple',
                 'label'=> 'Tags',
             ], function () {
-                return \Backpack\NewsCRUD\app\Models\Tag::all()->keyBy('id')->pluck('name', 'id')->toArray();
+                return \App\Models\Tag::all()->keyBy('id')->pluck('name', 'id')->toArray();
             }, function ($values) { // if the filter is active
                 $this->crud->query = $this->crud->query->whereHas('tags', function ($q) use ($values) {
                     foreach (json_decode($values) as $key => $value) {
@@ -170,7 +170,7 @@ class ArticleCrudController extends CrudController
      */
     public function fetchCategory()
     {
-        return $this->fetch(\Backpack\NewsCRUD\app\Models\Category::class);
+        return $this->fetch(\App\Models\Category::class);
     }
 
     /**
@@ -180,6 +180,6 @@ class ArticleCrudController extends CrudController
      */
     public function fetchTags()
     {
-        return $this->fetch(\Backpack\NewsCRUD\app\Models\Tag::class);
+        return $this->fetch(\App\Models\Tag::class);
     }
 }

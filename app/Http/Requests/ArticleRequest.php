@@ -1,6 +1,6 @@
 <?php
 
-namespace Backpack\NewsCRUD\app\Http\Requests;
+namespace App\Http\Requests;
 
 class ArticleRequest extends \Backpack\CRUD\app\Http\Requests\CrudRequest
 {
