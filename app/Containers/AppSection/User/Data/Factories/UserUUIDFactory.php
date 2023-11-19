@@ -16,6 +16,7 @@ class UserUUIDFactory extends ParentFactory
         static $password;
 
         return [
+            'id' => Str::orderedUuid(),
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
             'password' => $password ?: $password = Hash::make('testing-password'),

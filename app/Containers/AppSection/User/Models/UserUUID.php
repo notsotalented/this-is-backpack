@@ -8,7 +8,7 @@ use App\Containers\AppSection\Authorization\Traits\AuthorizationTrait;
 use App\Ship\Contracts\MustVerifyEmail;
 use App\Ship\Parents\Models\UserModel as ParentUserModel;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Validation\Rules\Password;
 use Backpack\CRUD\app\Models\Traits\CrudTrait; // <------------------------------- this one
 use Spatie\Permission\Traits\HasRoles;
@@ -19,7 +19,7 @@ class UserUUID extends ParentUserModel implements MustVerifyEmail
     use AuthenticationTrait;
     use CrudTrait;
     use HasRoles;
-    use HasUlids;
+    use HasUuids;
 
     protected $fillable = [
         'name',
