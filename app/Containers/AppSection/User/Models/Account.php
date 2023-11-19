@@ -3,10 +3,15 @@
 namespace App\Containers\AppSection\User\Models;
 
 use App\Ship\Parents\Models\Model as ParentModel;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Account extends ParentModel
 {
+    use CrudTrait;
+
+    protected $table = 'accounts_of_user';
     protected $fillable = [
         'name',
         'password',
@@ -30,6 +35,6 @@ class Account extends ParentModel
 
     public function getOwner(): BelongsTo
     {
-      return $this->belongsTo(User::class, 'user_id', 'id');
+      return $this->belongsTo(User::class, 'belongs_to', 'id');
     }
 }

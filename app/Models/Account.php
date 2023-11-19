@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Account extends Model
 {
-    use CrudTrait;
+
     use HasFactory;
 
     /*

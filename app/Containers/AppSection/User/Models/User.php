@@ -58,4 +58,8 @@ class User extends ParentUserModel implements MustVerifyEmail
             get: fn (?string $value): ?string => is_null($value) ? null : strtolower($value),
         );
     }
+
+    public function ownAccounts() {
+        return $this->hasMany(Account::class, 'belongs_to', 'id');
+    }
 }

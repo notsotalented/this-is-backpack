@@ -3,10 +3,14 @@
 namespace App\Containers\AppSection\User\Models;
 
 use App\Ship\Parents\Models\Model as ParentModel;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends ParentModel
 {
+    use CrudTrait;
+
+    protected $table = 'transactions_of_accounts';
     protected $fillable = [
         'from_account',
         'to_account',
@@ -30,11 +34,11 @@ class Transaction extends ParentModel
 
     public function getFrom(): BelongsTo
     {
-      return $this->belongsTo(User::class, 'from_account', 'id');
+      return $this->belongsTo(Account::class, 'from_account', 'id');
     }
 
     public function getTo(): BelongsTo
     {
-      return $this->belongsTo(User::class, 'to_account', 'id');
+      return $this->belongsTo(Account::class, 'to_account', 'id');
     }
 }
