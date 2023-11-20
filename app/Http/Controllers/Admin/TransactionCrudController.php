@@ -175,16 +175,6 @@ class TransactionCrudController extends CrudController
             'type'           => 'get_account_by_id_ajax',
             'view_namespace' => file_exists(resource_path('views/vendor/backpack/crud/fields/get_account_by_id_ajax')),
         ]);
-
-        CRUD::addField([
-            'name'       => 'Testing',
-            'label'      => 'TestTestTest',
-            'type'       => 'text',
-            'value'      => '<span class="badge text-bg-warning">Test</span>',
-            'attributes' => [
-                'required' => true,
-            ],
-        ]);
     }
 
     /**
@@ -221,18 +211,6 @@ class TransactionCrudController extends CrudController
             'attributes' => [
                 'readonly' => true,
                 'hidden' => true,
-            ],
-        ]);
-
-        CRUD::field([
-            'name' => 'fake_from',
-            'label' => 'From',
-            'type' => 'text',
-            'default' => function ($crud, $column, $entry, $related_key) {
-                return Account::find($column['text'])->name;
-            },
-            'attributes' => [
-                'readonly' => 'readonly',
             ],
         ]);
 

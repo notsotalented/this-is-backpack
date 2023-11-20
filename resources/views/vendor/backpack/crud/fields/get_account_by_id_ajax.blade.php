@@ -7,7 +7,7 @@ $field['value'] = old_empty_or_null($field['name'], '') ?? ($field['value'] ?? (
 <label>{!! $field['label'] !!}</label>
 @include('crud::fields.inc.translatable_icon')
 
-<input type="text" name="{{ $field['name'] }}" id="{{ $field['name'] }}" value="{{ $field['value'] }}"
+<input type="text" name="{{ $field['name'] }}" id="{{ $field['name'] }}" value="{{ $field['value'] }}" autocomplete="off"
     @include('crud::fields.inc.attributes')>
 <p class='help-block' id='account_info'>Use the ID of the account</p>
 
