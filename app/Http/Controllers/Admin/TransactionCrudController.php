@@ -260,16 +260,4 @@ class TransactionCrudController extends CrudController
             'view_namespace' => file_exists(resource_path('views/vendor/backpack/crud/fields/get_account_by_id_ajax')),
         ]);
     }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    // protected function setupUpdateOperation()
-    // {
-    //     $this->setupCreateOperation();
-    //     CRUD::setValidation(TransactionCreateRequest::class);
-    // }
 }
