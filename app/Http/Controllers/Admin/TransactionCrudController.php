@@ -7,6 +7,7 @@ use App\Containers\AppSection\User\Models\Transaction;
 use App\Containers\AppSection\User\Models\User;
 use App\Http\Requests\TransactionRequest;
 use App\Http\Requests\TransactionCreateRequest;
+use App\Http\Requests\TransactionUpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -123,8 +124,6 @@ class TransactionCrudController extends CrudController
         $pa_id = \Arr::pluck($personal_accounts, 'id');
         $pa_money = \Arr::pluck($personal_accounts, 'money');
 
-        //dd($pa_name);
-
         CRUD::addField([
             'suffix' => 'VND',
             'name' => 'from_account',
@@ -175,6 +174,16 @@ class TransactionCrudController extends CrudController
                 'required' => true,
             ]
         ]);
+
+        CRUD::addField([
+            'name' => 'Testing',
+            'label' => 'TestTestTest',
+            'type' => 'text',
+            'value' => '<span class="badge text-bg-warning">Test</span>',
+            'attributes' => [
+                'required' => true,
+            ],
+        ]);
     }
 
     /**
@@ -185,8 +194,76 @@ class TransactionCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
-        CRUD::setValidation(TransactionCreateRequest::class);
+        //$this->setupCreateOperation();
+        CRUD::setValidation(TransactionUpdateRequest::class);
 
+        CRUD::addField([
+            'name' => 'from_account',
+            'label' => 'From Account',
+            'type' => 'hidden',
+            'default' => function ($crud, $column, $entry, $related_key) {
+                return $column['text'];
+            },
+
+            'attributes' => [
+                'readonly' => 'readonly',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'to_account',
+            'label' => 'To Account',
+            'type' => 'hidden',
+            'default' => function ($crud, $column, $entry, $related_key) {
+                return $column['text'];
+            },
+            'attributes' => [
+                'readonly' => 'readonly',
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'type',
+            'label' => 'Type',
+            'type' => 'radio',
+            'options' => [
+                'Transfer' => 'Transfer',
+                'Receive' => 'Receive',
+                'Internal Transfer' => 'Internal Transfer',
+            ],
+            'attributes' => [
+                'required' => true,
+                'readonly' => true,
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'money',
+            'label' => 'Money',
+            'prefix' => 'VND',
+            'type' => 'number',
+            'attributes' => [
+                'required' => true,
+                'min' => 0,
+                'readonly' => true,
+            ],
+        ]);
+
+        CRUD::addField([
+            'name' => 'to_account',
+            'label' => 'To Account',
+            'type' => 'text',
+            'hint' => 'Use the ID of the account',
+            'attributes' => [
+                'required' => true,
+                'readonly' => true,
+            ]
+        ]);
+
+        CRUD::addField([
+                'name'  => 'is_completed', // The db column name
+                'label' => 'Status', // Table column heading
+                'type'  => 'switch'
+        ]);
     }
 }
