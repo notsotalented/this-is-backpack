@@ -194,28 +194,41 @@ class TransactionCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        //$this->setupCreateOperation();
         CRUD::setValidation(TransactionUpdateRequest::class);
 
         CRUD::addField([
             'name' => 'from_account',
-            'label' => 'From Account',
+            'label' => 'From',
             'type' => 'hidden',
             'default' => function ($crud, $column, $entry, $related_key) {
                 return $column['text'];
             },
 
             'attributes' => [
-                'readonly' => 'readonly',
+                'readonly' => true,
+                'hidden' => true,
             ],
         ]);
 
         CRUD::addField([
             'name' => 'to_account',
-            'label' => 'To Account',
+            'label' => 'To',
             'type' => 'hidden',
             'default' => function ($crud, $column, $entry, $related_key) {
                 return $column['text'];
+            },
+            'attributes' => [
+                'readonly' => true,
+                'hidden' => true,
+            ],
+        ]);
+
+        CRUD::field([
+            'name' => 'fake_from',
+            'label' => 'From',
+            'type' => 'text',
+            'default' => function ($crud, $column, $entry, $related_key) {
+                return Account::find($column['text'])->name;
             },
             'attributes' => [
                 'readonly' => 'readonly',
@@ -225,12 +238,10 @@ class TransactionCrudController extends CrudController
         CRUD::addField([
             'name' => 'type',
             'label' => 'Type',
-            'type' => 'radio',
-            'options' => [
-                'Transfer' => 'Transfer',
-                'Receive' => 'Receive',
-                'Internal Transfer' => 'Internal Transfer',
-            ],
+            'type' => 'text',
+            'default' => function ($crud, $column, $entry, $related_key) {
+                return $column['text'];
+            },
             'attributes' => [
                 'required' => true,
                 'readonly' => true,
@@ -247,17 +258,6 @@ class TransactionCrudController extends CrudController
                 'min' => 0,
                 'readonly' => true,
             ],
-        ]);
-
-        CRUD::addField([
-            'name' => 'to_account',
-            'label' => 'To Account',
-            'type' => 'text',
-            'hint' => 'Use the ID of the account',
-            'attributes' => [
-                'required' => true,
-                'readonly' => true,
-            ]
         ]);
 
         CRUD::addField([
