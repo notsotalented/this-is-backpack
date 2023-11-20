@@ -177,10 +177,10 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'Testing',
-            'label' => 'TestTestTest',
-            'type' => 'text',
-            'value' => '<span class="badge text-bg-warning">Test</span>',
+            'name'       => 'Testing',
+            'label'      => 'TestTestTest',
+            'type'       => 'text',
+            'value'      => '<span class="badge text-bg-warning">Test</span>',
             'attributes' => [
                 'required' => true,
             ],
@@ -199,10 +199,10 @@ class TransactionCrudController extends CrudController
         CRUD::setValidation(TransactionUpdateRequest::class);
 
         CRUD::addField([
-            'name' => 'from_account',
-            'label' => 'From Account',
-            'type' => 'hidden',
-            'default' => function ($crud, $column, $entry, $related_key) {
+            'name'       => 'from_account',
+            'label'      => 'From Account',
+            'type'       => 'hidden',
+            'default'    => function ($crud, $column, $entry, $related_key) {
                 return $column['text'];
             },
 
@@ -212,10 +212,10 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'to_account',
-            'label' => 'To Account',
-            'type' => 'hidden',
-            'default' => function ($crud, $column, $entry, $related_key) {
+            'name'       => 'to_account',
+            'label'      => 'To Account',
+            'type'       => 'hidden',
+            'default'    => function ($crud, $column, $entry, $related_key) {
                 return $column['text'];
             },
             'attributes' => [
@@ -224,12 +224,12 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'type',
-            'label' => 'Type',
-            'type' => 'radio',
-            'options' => [
-                'Transfer' => 'Transfer',
-                'Receive' => 'Receive',
+            'name'       => 'type',
+            'label'      => 'Type',
+            'type'       => 'radio',
+            'options'    => [
+                'Transfer'          => 'Transfer',
+                'Receive'           => 'Receive',
                 'Internal Transfer' => 'Internal Transfer',
             ],
             'attributes' => [
@@ -239,32 +239,37 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'money',
-            'label' => 'Money',
-            'prefix' => 'VND',
-            'type' => 'number',
+            'name'       => 'money',
+            'label'      => 'Money',
+            'prefix'     => 'VND',
+            'type'       => 'number',
             'attributes' => [
                 'required' => true,
-                'min' => 0,
-                'readonly' => true,
+                'min'      => 0,
             ],
         ]);
 
         CRUD::addField([
-            'name' => 'to_account',
-            'label' => 'To Account',
-            'type' => 'text',
-            'hint' => 'Use the ID of the account',
-            'attributes' => [
+            'name'           => 'to_account',
+            'label'          => 'To Account',
+            // 'hint'           => 'Use the ID of the account',
+            'attributes'     => [
                 'required' => true,
-                'readonly' => true,
-            ]
+            ],
+            'type'           => 'get_account_by_id_ajax',
+            'view_namespace' => file_exists(resource_path('views/vendor/backpack/crud/fields/get_account_by_id_ajax')),
         ]);
+    }
 
-        CRUD::addField([
-                'name'  => 'is_completed', // The db column name
-                'label' => 'Status', // Table column heading
-                'type'  => 'switch'
-        ]);
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
+    {
+        $this->setupCreateOperation();
+        CRUD::setValidation(TransactionCreateRequest::class);
     }
 }
