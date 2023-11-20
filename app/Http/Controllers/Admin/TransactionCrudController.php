@@ -51,13 +51,13 @@ class TransactionCrudController extends CrudController
          */
 
         CRUD::addColumn([
-            'name' => 'from_account',
-            'label' => 'From Account',
-            'type' => 'select',
-            'entity' => 'getFrom',
-            'model' => Account::class,
+            'name'      => 'from_account',
+            'label'     => 'From Account',
+            'type'      => 'select',
+            'entity'    => 'getFrom',
+            'model'     => Account::class,
             'attribute' => 'name',
-            'wrapper' => [
+            'wrapper'   => [
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url('account/' . $related_key . '/show');
                 },
@@ -69,13 +69,13 @@ class TransactionCrudController extends CrudController
         CRUD::column('money');
 
         CRUD::addColumn([
-            'name' => 'to_account',
-            'label' => 'To Account',
-            'type' => 'select',
-            'entity' => 'getTo',
-            'model' => Account::class,
+            'name'      => 'to_account',
+            'label'     => 'To Account',
+            'type'      => 'select',
+            'entity'    => 'getTo',
+            'model'     => Account::class,
             'attribute' => 'name',
-            'wrapper' => [
+            'wrapper'   => [
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url('account/' . $related_key . '/show');
                 },
@@ -83,16 +83,16 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addColumn([
-            'name' => 'is_completed',
-            'label' => 'Status',
-            'type' => 'boolean',
+            'name'    => 'is_completed',
+            'label'   => 'Status',
+            'type'    => 'boolean',
             'options' => [
                 0 => 'Pending',
                 1 => 'Completed',
             ],
             'wrapper' => [
                 'element' => 'span',
-                'class' => function ($crud, $column, $entry, $related_key) {
+                'class'   => function ($crud, $column, $entry, $related_key) {
                     if ($column['text'] == 'Completed')
                         return 'badge text-bg-success';
                     return 'badge text-bg-warning';
@@ -119,22 +119,22 @@ class TransactionCrudController extends CrudController
 
         $personal_accounts = User::find(\Auth::user()->id)->ownAccounts;
         //Array processing
-        $pa_name = \Arr::pluck($personal_accounts, 'name');
-        $pa_id = \Arr::pluck($personal_accounts, 'id');
+        $pa_name  = \Arr::pluck($personal_accounts, 'name');
+        $pa_id    = \Arr::pluck($personal_accounts, 'id');
         $pa_money = \Arr::pluck($personal_accounts, 'money');
 
         //dd($pa_name);
 
         CRUD::addField([
-            'suffix' => 'VND',
-            'name' => 'from_account',
-            'label' => 'From Account',
-            'type' => 'radio',
-            'options' => array_combine(
-                            $pa_id,
-                            array_map(function ($value1, $value2) {
-                                return $value1 . ' <span class="badge text-bg-success">' . $value2 . ' VND</span>';
-                            }, $pa_name, $pa_money),
+            'suffix'     => 'VND',
+            'name'       => 'from_account',
+            'label'      => 'From Account',
+            'type'       => 'radio',
+            'options'    => array_combine(
+                $pa_id,
+                array_map(function ($value1, $value2) {
+                    return $value1 . ' <span class="badge text-bg-success">' . $value2 . ' VND</span>';
+                }, $pa_name, $pa_money),
             ),
             'attributes' => [
                 'required' => true,
@@ -142,12 +142,12 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'type',
-            'label' => 'Type',
-            'type' => 'radio',
-            'options' => [
-                'Transfer' => 'Transfer',
-                'Receive' => 'Receive',
+            'name'       => 'type',
+            'label'      => 'Type',
+            'type'       => 'radio',
+            'options'    => [
+                'Transfer'          => 'Transfer',
+                'Receive'           => 'Receive',
                 'Internal Transfer' => 'Internal Transfer',
             ],
             'attributes' => [
@@ -156,24 +156,25 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name' => 'money',
-            'label' => 'Money',
-            'prefix' => 'VND',
-            'type' => 'number',
+            'name'       => 'money',
+            'label'      => 'Money',
+            'prefix'     => 'VND',
+            'type'       => 'number',
             'attributes' => [
                 'required' => true,
-                'min' => 0,
+                'min'      => 0,
             ],
         ]);
 
         CRUD::addField([
-            'name' => 'to_account',
-            'label' => 'To Account',
-            'type' => 'text',
-            'hint' => 'Use the ID of the account',
-            'attributes' => [
+            'name'           => 'to_account',
+            'label'          => 'To Account',
+            // 'hint'           => 'Use the ID of the account',
+            'attributes'     => [
                 'required' => true,
-            ]
+            ],
+            'type'           => 'get_account_by_id_ajax',
+            'view_namespace' => file_exists(resource_path('views/vendor/backpack/crud/fields/get_account_by_id_ajax')),
         ]);
     }
 

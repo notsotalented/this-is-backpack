@@ -26,3 +26,15 @@ Route::group([
     Route::crud('account', 'AccountCrudController');
     Route::crud('transaction', 'TransactionCrudController');
 }); // this should be the absolute last line of this file
+
+// Compare this snippet from app/Containers/AppSection/User/Models/Transaction.php:
+Route::group([
+    'prefix'     => config('backpack.base.route_prefix', 'admin'),
+    'middleware' => array_merge(
+        (array) config('backpack.base.web_middleware', 'web'),
+        (array) config('backpack.base.middleware_key', 'admin')
+    ),
+    'namespace'  => 'App\Http\Controllers\Admin\Ajax',
+], function () { // custom admin routes
+    Route::get('get_account_by_id_ajax', 'GetAccountByIdAjaxController')->name('get_account_by_id_ajax');
+}); // this should be the absolute last line of this file
