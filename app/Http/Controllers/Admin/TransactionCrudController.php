@@ -267,9 +267,9 @@ class TransactionCrudController extends CrudController
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
-    protected function setupUpdateOperation()
-    {
-        $this->setupCreateOperation();
-        CRUD::setValidation(TransactionCreateRequest::class);
-    }
+    // protected function setupUpdateOperation()
+    // {
+    //     $this->setupCreateOperation();
+    //     CRUD::setValidation(TransactionCreateRequest::class);
+    // }
 }
