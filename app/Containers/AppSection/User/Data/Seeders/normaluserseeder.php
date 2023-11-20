@@ -11,10 +11,10 @@ class NormalUserSeeder extends ParentSeeder
     public function run()
     {
         //Loop from i = 1 to 1000
-        for ($i = 1; $i <= 2; $i++) {
-            UserUUID::factory()->count(5)->create();
-            dump($i);
-        }
+        // for ($i = 1; $i <= 2; $i++) {
+        //     UserUUID::factory()->count(5)->create();
+        //     dump($i);
+        // }
 
         // //Loop from j = 1 to 1000
         // for ($j = 1; $j<= 1000; $j++) {
