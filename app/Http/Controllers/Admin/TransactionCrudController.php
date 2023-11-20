@@ -187,5 +187,6 @@ class TransactionCrudController extends CrudController
     {
         $this->setupCreateOperation();
         CRUD::setValidation(TransactionCreateRequest::class);
+
     }
 }

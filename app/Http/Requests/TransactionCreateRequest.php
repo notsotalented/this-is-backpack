@@ -26,15 +26,20 @@ class TransactionCreateRequest extends FormRequest
      */
     public function rules()
     {
-        if (isset($this->from_account) && (($this->type ?? '' == 'Transfer') || ($this->type ?? '' == 'Internal transfer'))) {
-            return [
-                'from_account' => 'required|exists:accounts_of_user,id',
-                'to_account' => 'required|exists:accounts_of_user,id',
-                'type' => 'required',
-                'money' => 'required|numeric|min:0|max:' . Account::find($this->from_account)->money,
-            ];
+        //If the request has information (i.e while doing the operation - Creating)
+        if (isset($this->from_account)) {
+            //Skip to default behavior if the request is 'Receive'
+            if ($this->type == 'Transfer' || $this->type == 'Internal Transfer') {
+                return [
+                    'from_account' => 'required|exists:accounts_of_user,id',
+                    'to_account' => 'required|exists:accounts_of_user,id',
+                    'type' => 'required',
+                    'money' => 'required|numeric|min:0|max:' . Account::find($this->from_account)->money,
+                ];
+            }
         }
 
+        //Default behavior, or when the request has no information (i.e access the create-page).
         return [
             'from_account' => 'required|exists:accounts_of_user,id',
             'to_account' => 'required|exists:accounts_of_user,id',
