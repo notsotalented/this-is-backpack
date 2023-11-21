@@ -188,41 +188,48 @@ class TransactionCrudController extends CrudController
         CRUD::setValidation(TransactionUpdateRequest::class);
 
         CRUD::addField([
+            'tab'        => 'Information',
+            'label'      => 'From',
+            'type'       => 'hidden',
             'name'       => 'from_account',
-            'label'      => 'From Account',
-            'type'       => 'hidden',
-            'default'    => function ($crud, $column, $entry, $related_key) {
-                return $column['text'];
-            },
-
-            'attributes' => [
-                'readonly' => true,
-                'hidden' => true,
-            ],
         ]);
 
         CRUD::addField([
+            'tab'        => 'Information',
+            'label'      => 'To',
+            'type'       => 'hidden',
             'name'       => 'to_account',
-            'label'      => 'To Account',
-            'type'       => 'hidden',
-            'default'    => function ($crud, $column, $entry, $related_key) {
-                return $column['text'];
-            },
+        ]);
+
+        CRUD::addField([
+            'tab'        => 'Information',
+            'label'      => 'From',
+            'type'       => 'select',
+            'name'       => 'from_acc',
+            'entity'     => 'getFrom',
+            'hint'       => 'Use the ID of the account',
+            'attribute' => 'name',
             'attributes' => [
-                'readonly' => true,
-                'hidden' => true,
+                'disabled' => true,
             ],
         ]);
 
         CRUD::addField([
-            'name'       => 'type',
-            'label'      => 'Type',
-            'type'       => 'radio',
-            'options'    => [
-                'Transfer'          => 'Transfer',
-                'Receive'           => 'Receive',
-                'Internal Transfer' => 'Internal Transfer',
+            'tab'        => 'Information',
+            'label'      => 'To',
+            'type'       => 'select',
+            'name'       => 'to_acc',
+            'entity'     => 'getTo',
+            'attribute' => 'name',
+            'attributes' => [
+                'disabled' => true,
             ],
+        ]);
+
+        CRUD::addField([
+            'tab'        => 'Information',
+            'name'       => 'type',
+            'type'       => 'text',
             'attributes' => [
                 'required' => true,
                 'readonly' => true,
@@ -230,6 +237,7 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
+            'tab'        => 'Information',
             'name'       => 'money',
             'label'      => 'Money',
             'prefix'     => 'VND',
@@ -241,14 +249,19 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'name'           => 'to_account',
-            'label'          => 'To Account',
-            // 'hint'           => 'Use the ID of the account',
-            'attributes'     => [
+            'tab' => 'Confirmation',
+            'name'  => 'is_completed',
+            'label' => 'Confirmation',
+            'type' => 'radio',
+            'hint' => 'Hãy suy nghĩ kĩ, bút sa gà chết. Không đổi được đâu',
+            'options' => [
+                //0 => 'Not confirmed',
+                1 => 'Đã xác nhận',
+            ],
+            'attributes' => [
                 'required' => true,
             ],
-            'type'           => 'get_account_by_id_ajax',
-            'view_namespace' => file_exists(resource_path('views/vendor/backpack/crud/fields/get_account_by_id_ajax')),
         ]);
+
     }
 }

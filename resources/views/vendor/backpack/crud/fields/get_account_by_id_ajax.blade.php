@@ -41,7 +41,7 @@ $field['value'] = old_empty_or_null($field['name'], '') ?? ($field['value'] ?? (
 @bassetBlock('path/to/script.js')
 <script>
     function bpFieldInitDummyFieldElement(element) {
-        // this function will be called on pageload, because it's
+        // this function will be called on page load, because it's
         // present as data-init-function in the HTML above; the
         // element parameter here will be the jQuery wrapped
         // element where init function was defined
