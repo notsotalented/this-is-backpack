@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Containers\AppSection\User\Models\Account;
 use App\Containers\AppSection\User\Models\User;
+use App\Http\Requests\AccountCreateRequest;
 use App\Http\Requests\AccountRequest;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -88,7 +89,7 @@ class AccountCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(AccountRequest::class);
+        CRUD::setValidation(AccountCreateRequest::class);
         //CRUD::setFromDb(); // set fields from db columns.
 
         /**
@@ -103,7 +104,8 @@ class AccountCrudController extends CrudController
             'default' => \Auth::user()->id,
 
             'attributes' => [
-                'readonly' => 'readonly',
+                'readonly' => true,
+                'required' => true,
             ],
         ]);
 
@@ -113,7 +115,7 @@ class AccountCrudController extends CrudController
             'type' => 'text',
             'default' => \Auth::user()->name,
             'attributes' => [
-                'readonly' => 'readonly',
+                'readonly' => true,
             ],
         ]);
 
@@ -148,10 +150,22 @@ class AccountCrudController extends CrudController
             'type' => 'number',
             'attributes' => [
                 'required' => true,
+                'min' => 0,
             ],
         ]);
 
-
+        CRUD::field([
+            'name' => 'password',
+            'label' => 'PIN',
+            'type' => 'password',
+            'hint' => '6 digit number',
+            'attributes' => [
+                'required' => true,
+                'maxlength' => 6,
+                'minlength' => 6,
+                'pattern' => '[0-9]*',
+            ],
+        ]);
     }
 
     /**

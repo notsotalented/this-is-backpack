@@ -100,6 +100,7 @@ class TransactionUpdateRequest extends FormRequest
 
                 if ($this->type == 'Transfer' || $this->type == 'Internal Transfer') {
 
+
                     $from->money -= $this->money;
                     $to->money += $this->money;
                 }
