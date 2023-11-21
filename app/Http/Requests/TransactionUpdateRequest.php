@@ -5,8 +5,6 @@ namespace App\Http\Requests;
 use App\Containers\AppSection\User\Models\Account;
 use App\Containers\AppSection\User\Models\Transaction;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Request;
-use Psy\Exception\ErrorException;
 
 class TransactionUpdateRequest extends FormRequest
 {
@@ -33,13 +31,13 @@ class TransactionUpdateRequest extends FormRequest
             $checkOwner = $owner->id == \Auth::user()->id;
 
             return $login && $checkOwner;
-            // dd($login && $checkOwner);
         }
 
 
         //Default
         // only allow updates if the user is logged in
         return backpack_auth()->check();
+
     }
 
     /**
