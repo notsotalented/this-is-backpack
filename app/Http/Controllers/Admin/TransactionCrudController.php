@@ -179,12 +179,15 @@ class TransactionCrudController extends CrudController
         CRUD::addField([
             'name'       => 'Testing',
             'label'      => 'TestTestTest',
-            'type'       => 'text',
-            'value'      => '<span class="badge text-bg-warning">Test</span>',
+            'type'       => 'handle_payment',
+            
+            'view_namespace' => file_exists(resource_path('views/vendor/backpack/crud/fields/handle_payment')),
+            
             'attributes' => [
                 'required' => true,
             ],
         ]);
+
     }
 
     /**
