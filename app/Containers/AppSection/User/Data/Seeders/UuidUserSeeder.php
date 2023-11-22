@@ -9,11 +9,15 @@ class UuidUserSeeder extends ParentSeeder
 {
     public function run()
     {
-        $time = time();
-        //Loop from j = 1 to 1000
-        for ($j = 1; $j<= 1000; $j++) {
-            UserUUID::factory()->create();
+        $total_time = time();
+        for ($i = 1; $i <= 4; $i++) {
+            $time = time();
+            //Loop from j = 1 to 250000
+            for ($j = 1; $j<= 250000; $j++) {
+                UserUUID::factory()->create();
+            }
+            dump('Elapsed time' . $i . ': '. $time = time() - $time);
         }
-        dump('Elapsed time: '. $time = time() - $time);
+        dump('Total time: ' . $total_time = time() - $total_time);
     }
 }

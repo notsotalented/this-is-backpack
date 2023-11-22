@@ -95,27 +95,30 @@ class TransactionUpdateRequest extends FormRequest
             /*TO-DO*/
             //Relocate money, temporary leave in here.
             if (isset($this->to_account) && $exists->is_completed == 0 && $this->is_completed == 1) {
-                $from = Account::findOrFail($this->from_account);
-                $to = Account::findOrFail($this->to_account);
 
                 if ($this->type == 'Transfer' || $this->type == 'Internal Transfer') {
-
-
+                    //Operation on from_account
+                    $from = Account::findOrFail($this->from_account);
                     $from->money -= $this->money;
+                    $from->save();
+                    //Operation on to_account
+                    $to = Account::findOrFail($this->to_account);
                     $to->money += $this->money;
+                    $to->save();
                 }
                 elseif ($this->type == 'Receive') {
-
+                    //Operation on from_account
+                    $from = Account::findOrFail($this->from_account);
                     $from->money += $this->money;
+                    $from->save();
+                    //Operation on to_account
+                    $to = Account::findOrFail($this->to_account);
                     $to->money -= $this->money;
-
+                    $to->save();
                 }
                 else {
                     $validator->errors()->add('type', 'Loại thao tác không hợp lệ!');
                 }
-
-                $from->save();
-                $to->save();
 
             }
 
