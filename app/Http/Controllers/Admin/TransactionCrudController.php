@@ -5,18 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Containers\AppSection\User\Models\Account;
 use App\Containers\AppSection\User\Models\Transaction;
 use App\Containers\AppSection\User\Models\User;
-use App\Http\Requests\TransactionRequest;
 use App\Http\Requests\TransactionCreateRequest;
 use App\Http\Requests\TransactionUpdateRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+
+use App\Http\Controllers\Admin\PaymentController;
 
 /**
  * Class TransactionCrudController
  * @package App\Http\Controllers\Admin
  * @property-read \Backpack\CRUD\app\Library\CrudPanel\CrudPanel $crud
  */
-class TransactionCrudController extends CrudController
+class TransactionCrudController extends PaymentController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
@@ -70,13 +71,13 @@ class TransactionCrudController extends CrudController
         CRUD::column('money');
 
         CRUD::addColumn([
-            'name'      => 'to_account',
-            'label'     => 'To Account',
-            'type'      => 'select',
-            'entity'    => 'getTo',
-            'model'     => Account::class,
-            'attribute' => 'name',
-            'wrapper'   => [
+            'name'       => 'to_account',
+            'label'      => 'To Account',
+            'type'       => 'select',
+            'entity'     => 'getTo',
+            'model'      => Account::class,
+            'attribute'  => 'name',
+            'wrapper'    => [
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url('account/' . $related_key . '/show');
                 },
@@ -88,7 +89,7 @@ class TransactionCrudController extends CrudController
             'label'   => 'Status',
             'type'    => 'boolean',
             'options' => [
-                0 => 'Pending',
+                0 => 'Error',
                 1 => 'Completed',
             ],
             'wrapper' => [
@@ -96,7 +97,7 @@ class TransactionCrudController extends CrudController
                 'class'   => function ($crud, $column, $entry, $related_key) {
                     if ($column['text'] == 'Completed')
                         return 'badge text-bg-success';
-                    return 'badge text-bg-warning';
+                    return 'badge text-bg-danger';
                 },
             ]
         ]);
@@ -128,6 +129,7 @@ class TransactionCrudController extends CrudController
             'suffix'     => 'VND',
             'name'       => 'from_account',
             'label'      => 'From Account',
+            'default'    => $pa_id[0] ?? null,
             'type'       => 'radio',
             'options'    => array_combine(
                 $pa_id,
@@ -144,6 +146,7 @@ class TransactionCrudController extends CrudController
             'name'       => 'type',
             'label'      => 'Type',
             'type'       => 'radio',
+            'default'    => 'Transfer',
             'options'    => [
                 'Transfer'          => 'Transfer',
                 'Receive'           => 'Receive',
@@ -176,16 +179,22 @@ class TransactionCrudController extends CrudController
             'view_namespace' => file_exists(resource_path('views/vendor/backpack/crud/fields/get_account_by_id_ajax')),
         ]);
 
-        CRUD::addField([
-            'name'       => 'Testing',
-            'label'      => 'TestTestTest',
-            'type'       => 'handle_payment',
-            
-            'view_namespace' => file_exists(resource_path('views/vendor/backpack/crud/fields/handle_payment')),
-            
-            'attributes' => [
-                'required' => true,
-            ],
+        CRUD::addSaveAction([
+            'name'         => 'save_and_pay', // name of the button
+            'redirect'     => function ($crud, $request, $itemId) {
+                return $this->handlePayment($request, $itemId) ? $crud->route : $crud->route . '/create';
+            }, // what's the redirect URL, where the user will be taken after saving?
+
+            // OPTIONAL:
+            'button_text'  => 'Payment and Save', // override text appearing on the button
+
+            'visible'      => function ($crud) {
+                return true;
+            }, // customize when this save action is visible for the current operation
+            'referrer_url' => function ($crud, $request, $itemId) {
+                return $crud->route;
+            }, // override http_referrer_url
+            'order'        => 1, // change the order save actions are in
         ]);
 
     }
@@ -201,17 +210,17 @@ class TransactionCrudController extends CrudController
         CRUD::setValidation(TransactionUpdateRequest::class);
 
         CRUD::addField([
-            'tab'        => 'Information',
-            'label'      => 'From',
-            'type'       => 'hidden',
-            'name'       => 'from_account',
+            'tab'   => 'Information',
+            'label' => 'From',
+            'type'  => 'hidden',
+            'name'  => 'from_account',
         ]);
 
         CRUD::addField([
-            'tab'        => 'Information',
-            'label'      => 'To',
-            'type'       => 'hidden',
-            'name'       => 'to_account',
+            'tab'   => 'Information',
+            'label' => 'To',
+            'type'  => 'hidden',
+            'name'  => 'to_account',
         ]);
 
         CRUD::addField([
@@ -221,7 +230,7 @@ class TransactionCrudController extends CrudController
             'name'       => 'from_acc',
             'entity'     => 'getFrom',
             'hint'       => 'Use the ID of the account',
-            'attribute' => 'name',
+            'attribute'  => 'name',
             'attributes' => [
                 'disabled' => true,
             ],
@@ -233,7 +242,7 @@ class TransactionCrudController extends CrudController
             'type'       => 'select',
             'name'       => 'to_acc',
             'entity'     => 'getTo',
-            'attribute' => 'name',
+            'attribute'  => 'name',
             'attributes' => [
                 'disabled' => true,
             ],
@@ -262,12 +271,12 @@ class TransactionCrudController extends CrudController
         ]);
 
         CRUD::addField([
-            'tab' => 'Confirmation',
-            'name'  => 'is_completed',
-            'label' => 'Confirmation',
-            'type' => 'radio',
-            'hint' => 'Hãy suy nghĩ kĩ, bút sa gà chết. Không đổi được đâu',
-            'options' => [
+            'tab'        => 'Confirmation',
+            'name'       => 'is_completed',
+            'label'      => 'Confirmation',
+            'type'       => 'radio',
+            'hint'       => 'Hãy suy nghĩ kĩ, bút sa gà chết. Không đổi được đâu',
+            'options'    => [
                 //0 => 'Not confirmed',
                 1 => 'Đã xác nhận',
             ],

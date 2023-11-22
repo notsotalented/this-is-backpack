@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignId('to_account')->constrained('accounts_of_user', 'id', 'transaction_to_account_id')->cascadeOnDelete();
             $table->string('type');
             $table->integer('money');
-            $table->boolean('is_completed')->default(false);
+            $table->boolean('is_completed')->default(false)->nullable();
             $table->timestamps();
             //$table->softDeletes();
         });

@@ -2,21 +2,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Containers\AppSection\User\Models\Account;
-use App\Http\Requests\TransactionRequest;
+use App\Containers\AppSection\User\Models\Transaction;
+use Illuminate\Http\Request;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 
 
 class PaymentController extends CrudController
 {
-    public function checkAccountBalanceBeforePayment(TransactionRequest $request)
+    public function checkAccountBalanceBeforePayment(Request $request)
     {
         try {
             $from_account = $request->input('from_account');
             $money        = $request->input('money');
             $account      = Account::find($from_account);
 
-            return $account->money > $money;
+            return $account->money >= $money;
         } catch (\Throwable $th) {
             // rollback transaction if something goes wrong (to avoid inconsistent states)
             \DB::rollback();
@@ -47,6 +48,8 @@ class PaymentController extends CrudController
             $account->money += $money;
             $account->save();
 
+
+
             return true;
         } catch (\Throwable $th) {
             // rollback transaction if something goes wrong (to avoid inconsistent states)
@@ -55,18 +58,22 @@ class PaymentController extends CrudController
         }
     }
 
-    public function handlePayment(TransactionRequest $request)
+    public function handlePayment(Request $request, $id = null)
     {
         $from_account = $request->input('from_account');
         $to_account   = $request->input('to_account');
         $money        = $request->input('money');
         $type         = $request->input('type');
 
-        if ($type == 'Tranfer' || $type == 'Internal Tranfer') {
+        if ($type === 'Transfer' || $type === 'Internal Tranfer') {
             if ($this->checkAccountBalanceBeforePayment($request)) {
                 if ($this->subMoneyFromAccount($from_account, $money))
-                    if ($this->addMoneyToAccount($to_account, $money))
+                    if ($this->addMoneyToAccount($to_account, $money)) {
+                        Transaction::find($id)->update([
+                            'is_completed' => true,
+                        ]);
                         return true;
+                    }
             }
         }
 

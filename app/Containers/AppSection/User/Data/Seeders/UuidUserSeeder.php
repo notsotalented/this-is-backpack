@@ -11,9 +11,9 @@ class UuidUserSeeder extends ParentSeeder
     {
         $time = time();
         //Loop from j = 1 to 1000
-        for ($j = 1; $j<= 1000; $j++) {
+        for ($j = 1; $j <= 0; $j++) {
             UserUUID::factory()->create();
         }
-        dump('Elapsed time: '. $time = time() - $time);
+        dump('Elapsed time: ' . $time = time() - $time);
     }
 }
