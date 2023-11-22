@@ -25,6 +25,7 @@ Route::group([
     Route::crud('role', 'RoleCrudController');
     Route::crud('account', 'AccountCrudController');
     Route::crud('transaction', 'TransactionCrudController');
+
 }); // this should be the absolute last line of this file
 
 // Compare this snippet from app/Containers/AppSection/User/Models/Transaction.php:
