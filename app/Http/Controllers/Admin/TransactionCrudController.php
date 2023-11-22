@@ -71,13 +71,13 @@ class TransactionCrudController extends PaymentController
         CRUD::column('money');
 
         CRUD::addColumn([
-            'name'       => 'to_account',
-            'label'      => 'To Account',
-            'type'       => 'select',
-            'entity'     => 'getTo',
-            'model'      => Account::class,
-            'attribute'  => 'name',
-            'wrapper'    => [
+            'name'      => 'to_account',
+            'label'     => 'To Account',
+            'type'      => 'select',
+            'entity'    => 'getTo',
+            'model'     => Account::class,
+            'attribute' => 'name',
+            'wrapper'   => [
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url('account/' . $related_key . '/show');
                 },
@@ -101,6 +101,12 @@ class TransactionCrudController extends PaymentController
                 },
             ]
         ]);
+
+        $pa_id = \Arr::pluck(User::find(\Auth::user()->id)->ownAccounts, 'id');
+        CRUD::addBaseClause(function ($query) use ($pa_id) {
+            $query->whereIn('from_account', $pa_id);
+            $query->orWhereIn('to_account', $pa_id);
+        });
     }
 
     /**
@@ -182,7 +188,9 @@ class TransactionCrudController extends PaymentController
         CRUD::addSaveAction([
             'name'         => 'save_and_pay', // name of the button
             'redirect'     => function ($crud, $request, $itemId) {
-                return $this->handlePayment($request, $itemId) ? $crud->route : $crud->route . '/create';
+                return $this->handlePayment($request, $itemId) ? $crud->route : (
+                    $crud->route . '/' . $itemId . '/edit'
+                );
             }, // what's the redirect URL, where the user will be taken after saving?
 
             // OPTIONAL:
