@@ -142,7 +142,7 @@ class TransactionCrudController extends PaymentController
             'options'    => array_combine(
                 $pa_id,
                 array_map(function ($value1, $value2) {
-                    return $value1 . ' <span class="badge text-bg-success">' . $value2 . ' VND</span>';
+                    return $value1 . ' <span class="badge text-bg-success">' . $value2 . ' <i class="las la-money-bill-wave-alt la-xl"></i></span>';
                 }, $pa_name, $pa_money),
             ),
             'attributes' => [
@@ -167,7 +167,7 @@ class TransactionCrudController extends PaymentController
 
         CRUD::addField([
             'name'       => 'money',
-            'label'      => 'Money',
+            'label'      => 'Money <i class="las la-money-bill-wave-alt la-"></i>',
             'prefix'     => 'VND',
             'type'       => 'number',
             'attributes' => [
