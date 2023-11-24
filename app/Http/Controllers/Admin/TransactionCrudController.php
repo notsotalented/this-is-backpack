@@ -11,6 +11,7 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 use App\Http\Controllers\Admin\PaymentController;
+use Backpack\CRUD\app\Library\Widget;
 
 /**
  * Class TransactionCrudController
@@ -62,6 +63,7 @@ class TransactionCrudController extends PaymentController
             'wrapper'   => [
                 'href' => function ($crud, $column, $entry, $related_key) {
                     return backpack_url('account/' . $related_key . '/show');
+
                 },
             ],
         ]);
@@ -237,7 +239,7 @@ class TransactionCrudController extends PaymentController
             'type'       => 'select',
             'name'       => 'from_acc',
             'entity'     => 'getFrom',
-            'hint'       => 'Use the ID of the account',
+            //'hint'       => 'Use the ID of the account',
             'attribute'  => 'name',
             'attributes' => [
                 'disabled' => true,
@@ -275,6 +277,7 @@ class TransactionCrudController extends PaymentController
             'attributes' => [
                 'required' => true,
                 'min'      => 0,
+                'readonly' => true,
             ],
         ]);
 
