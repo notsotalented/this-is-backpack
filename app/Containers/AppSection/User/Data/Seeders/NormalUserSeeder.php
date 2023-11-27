@@ -11,7 +11,7 @@ class NormalUserSeeder extends ParentSeeder
     {
         $time = time();
         //Loop from j = 1 to 1000000
-        for ($j = 1; $j <= 0; $j++) {
+        for ($j = 1; $j <= 1000000; $j++) {
             User::factory()->create();
         }
         dump('Elapsed time: ' . $time = time() - $time);
