@@ -38,4 +38,5 @@ Route::group([
     'namespace'  => 'App\Http\Controllers\Admin\Ajax',
 ], function () { // custom admin routes
     Route::get('get_account_by_id_ajax', 'GetAccountByIdAjaxController')->name('get_account_by_id_ajax');
+    Route::get('get_transaction_by_user_ajax', 'GetTransactionByUserAjaxController')->name('get_transaction_by_user_ajax');
 }); // this should be the absolute last line of this file

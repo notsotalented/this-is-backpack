@@ -7,7 +7,6 @@ use App\Containers\AppSection\User\Models\Transaction;
 use App\Containers\AppSection\User\Models\User;
 use App\Http\Requests\TransactionCreateRequest;
 use App\Http\Requests\TransactionUpdateRequest;
-use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
 use App\Http\Controllers\Admin\PaymentController;
@@ -52,7 +51,6 @@ class TransactionCrudController extends PaymentController
          * Columns can be defined using the fluent syntax:
          * - CRUD::column('price')->type('number');
          */
-
         CRUD::addColumn([
             'name'      => 'from_account',
             'label'     => 'From Account',
@@ -104,10 +102,10 @@ class TransactionCrudController extends PaymentController
             ]
         ]);
 
-        $pa_id = \Arr::pluck(User::find(\Auth::user()->id)->ownAccounts, 'id');
-        CRUD::addBaseClause(function ($query) use ($pa_id) {
-            $query->whereIn('from_account', $pa_id);
-            $query->orWhereIn('to_account', $pa_id);
+        $pa_ids = \Arr::pluck(User::find(\Auth::user()->id)->ownAccounts, 'id');
+        CRUD::addBaseClause(function ($query) use ($pa_ids) {
+            $query->whereIn('from_account', $pa_ids);
+            $query->orWhereIn('to_account', $pa_ids);
         });
     }
 
@@ -179,7 +177,6 @@ class TransactionCrudController extends PaymentController
         CRUD::addField([
             'name'           => 'to_account',
             'label'          => 'To Account',
-            // 'hint'           => 'Use the ID of the account',
             'attributes'     => [
                 'required' => true,
             ],
@@ -195,7 +192,6 @@ class TransactionCrudController extends PaymentController
                 );
             }, // what's the redirect URL, where the user will be taken after saving?
 
-            // OPTIONAL:
             'button_text'  => 'Payment and Save', // override text appearing on the button
 
             'visible'      => function ($crud) {
@@ -204,7 +200,7 @@ class TransactionCrudController extends PaymentController
             'referrer_url' => function ($crud, $request, $itemId) {
                 return $crud->route;
             }, // override http_referrer_url
-            'order'        => 1, // change the order save actions are in
+            'order'        => 0, // change the order save actions are in
         ]);
 
     }
