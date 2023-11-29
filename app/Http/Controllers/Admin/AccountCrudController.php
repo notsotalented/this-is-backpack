@@ -236,4 +236,77 @@ class AccountCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
+    protected function setupShowOperation()
+    {
+        $this->autoSetupShowOperation();
+
+        $handle_string = request()->getPathInfo();
+
+        $pattern = "/\/admin\/account\/(\d+)\/show/";
+
+        if (preg_match($pattern, $handle_string, $matches)) {
+            $id[0] = $matches[1];
+        }
+
+        $pa_ids = \Arr::pluck(User::find(\Auth::user()->id)->ownAccounts, 'id');
+
+        //dd($id, $pa_ids);
+
+        $pa_ids = $id;
+
+        Widget::add()->to('after_content')->type('div')->class('row')->content([
+            Widget::make(
+                [
+                    'type'          => 'chart',
+                    'class'         => 'chart bg-light text-black mt-4',
+                    'viewNamespace' => 'package::widgets',
+                    'datasets'      => [
+                        'revenue'     => [ // Tiền thu
+                            'completed'     => Transaction::where(function ($query) use ($pa_ids) {
+                                $query->whereIn('from_account', $pa_ids)
+                                    ->orWhereIn('to_account', $pa_ids);
+                            })
+                                ->whereYear('created_at', Carbon::now()->year)
+                                ->whereMonth('created_at', Carbon::now()->month)
+                                ->where('is_completed', 1)
+                                ->where('type', 'Receive')
+                                ->get(),
+
+                            'not_completed' => Transaction::where(function ($query) use ($pa_ids) {
+                                $query->whereIn('from_account', $pa_ids)
+                                    ->orWhereIn('to_account', $pa_ids);
+                            })
+                                ->whereYear('created_at', Carbon::now()->year)
+                                ->whereMonth('created_at', Carbon::now()->month)
+                                ->where('is_completed', 0)
+                                ->where('type', 'Receive')
+                                ->get(),
+                        ],
+                        'expenditure' => [ // Tiền chi
+                            'completed'     => Transaction::where(function ($query) use ($pa_ids) {
+                                $query->whereIn('from_account', $pa_ids)
+                                    ->orWhereIn('to_account', $pa_ids);
+                            })
+                                ->whereYear('created_at', Carbon::now()->year)
+                                ->whereMonth('created_at', Carbon::now()->month)
+                                ->where('is_completed', 1)
+                                ->where('type', 'Transfer')
+                                ->get(),
+
+                            'not_completed' => Transaction::where(function ($query) use ($pa_ids) {
+                                $query->whereIn('from_account', $pa_ids)
+                                    ->orWhereIn('to_account', $pa_ids);
+                            })
+                                ->whereYear('created_at', Carbon::now()->year)
+                                ->whereMonth('created_at', Carbon::now()->month)
+                                ->where('is_completed', 0)
+                                ->where('type', 'Transfer')
+                                ->get(),
+                        ],
+                    ]
+                ]
+            )
+        ]);
+    }
 }
